@@ -16,8 +16,8 @@ export class HomeComponent implements OnInit {
   regForm = new FormGroup({
     name: new FormControl(''),
     email: new FormControl('',[Validators.required,Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,3}$')]),
-    password: new FormControl('',[Validators.required,Validators.pattern('^(?=[^A-Z][A-Z])(?=[^a-z][a-z])(?=\\D*\\d)[A-Za-z\\d!$%@#£€*?&]{8,}$')])
-  })
+    password: new FormControl('',[Validators.required,Validators.pattern('^(?=[^A-Z]*[A-Z])(?=[^a-z]*[a-z])(?=\\D*\\d)[A-Za-z\\d!$%@#£€*?&]{8,}$')])
+  });
 
   get email(){ 
     return this.regForm.get('email');
@@ -60,6 +60,7 @@ export class HomeComponent implements OnInit {
     this.authservice.userlogin(this.user)
     .subscribe(
       data=>{
+        localStorage.setItem('user','logined');
         alert("login success")
       },
       err=>{        

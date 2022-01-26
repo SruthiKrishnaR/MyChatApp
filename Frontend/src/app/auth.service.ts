@@ -17,5 +17,7 @@ export class AuthService {
     return this.http.post<any>(`${this.server_address}/login`,user)
   }
 
-
+  userLoggedIn(){
+    return !!localStorage.getItem('user');
+  }
 }
