@@ -818,19 +818,22 @@ body[data-theme="dark"] {
     transform: translateX(0);
     opacity: 1;
   }
+  /* body {
+    position: relative;
+  } */
   .open-left {
     display: block;
   }
-  /* body {
-    position: relative;
-  }
-  .app-main {
+  /* .app-main {
     position: absolute;
-    display: inline-block;
   }
   .app-container {
+    height: calc(100% - 48px);
     position: absolute;
     display: inline-block;
+  } */
+  /* .app-main {
+    display: block;
   } */
 }
 @media screen and (max-width: 680px) {
@@ -856,9 +859,5 @@ body[data-theme="dark"] {
   .app-theme-selector {
     position: fixed;
     bottom: 0;
-  }
-
-  .app-main {
-    height: calc(100% - 48px);
   }
 }

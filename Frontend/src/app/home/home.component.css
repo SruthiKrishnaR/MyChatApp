@@ -41,8 +41,8 @@ label {
 }
 input {
   width: 60%;
-  height: 20px;
-  background: #e0dede;
+  height: 35px;
+  background: #fdfbfb;
   justify-content: center;
   display: flex;
   margin: 20px auto;

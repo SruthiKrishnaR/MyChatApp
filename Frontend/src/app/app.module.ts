@@ -7,13 +7,16 @@ import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { ChatroomComponent } from './chatroom/chatroom.component';
 import { HeaderComponent } from './header/header.component';
+import { AuthService } from './auth.service';
+import { ChathistoryComponent } from './chathistory/chathistory.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
     ChatroomComponent,
-    HeaderComponent
+    HeaderComponent,
+    ChathistoryComponent
   ],
   imports: [
     BrowserModule,
@@ -22,7 +25,7 @@ import { HeaderComponent } from './header/header.component';
     FormsModule,
     HttpClientModule
   ],
-  providers: [],
+  providers: [AuthService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
