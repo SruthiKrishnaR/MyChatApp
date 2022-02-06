@@ -21,7 +21,7 @@ const port = process.env.PORT || 5200;
 app.post('/signup',async(req,res)=>{
     res.header("Acces-Control-Allow-Origin","*");
     res.header("Acces-Control-Allow-Methods: GET, POST, PATH, PUT, DELETE, HEAD"); 
-    console.log(req.body);
+    // console.log(req.body);
     var item={
         name:req.body.name,
         password:req.body.password,
@@ -75,7 +75,7 @@ app.get('/getUser/:id',(req,res)=>{
 app.post('/login',(req,res)=>{
     res.header("Acces-Control-Allow-Origin","*");
     res.header("Acces-Control-Allow-Methods: GET, POST, PATH, PUT, DELETE, HEAD"); 
-    console.log(req.body);
+    // console.log(req.body);
     userdata.findOne({email:req.body.email},(err,user)=>{
         console.log(user);
         if(user){
@@ -89,9 +89,11 @@ app.post('/login',(req,res)=>{
                     // res.status(200).send({token,role:'student',id:student._id})
                     userdata.findOneAndUpdate({email:user.email}, 
                         {$set:{status:"online"}
+                    }).then(()=>{
+
+                        res.send(user)
                     })
                     console.log("success");
-                    res.send(user)
                    
                 }else{
                     console.log("failed");
@@ -107,17 +109,16 @@ app.post('/login',(req,res)=>{
 
 // logout 
 
-app.post('/logout',function(req, res){
+app.get('/logout/:mail',function(req, res){
     res.header("Access-Control-Allow-Origin","*")
     res.header("Access-Control-Allow-Methods:GET,POST,PATCH,PUT,DELETE,OPTIONS")
    // const id = req.body._id;
-   console.log(req.body.email);
-  const email=req.body.email;
-  
-     userdata.findOneAndUpdate({"email":email}, {$set:{"status":"offline"}})
+   console.log("logout"+req.params.mail);
+  const email=req.params.mail;
+     userdata.findOneAndUpdate({"email":email}, {$set:{status:"offline"}})
      .then((offlineuser)=>{
-         res.send(offlineuser);
-        // console.log(verifiedcandidate)
+         console.log("logout");
+         res.send();
      });
  })
 

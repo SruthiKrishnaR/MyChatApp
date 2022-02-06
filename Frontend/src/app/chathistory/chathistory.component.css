@@ -142,7 +142,7 @@ body[data-theme="dark"] {
   flex-direction: column;
   height: 100%;
   width: 100%;
-  padding: 24px;
+  padding: 10px;
   max-width: 1800px;
 }
 
@@ -193,7 +193,7 @@ body[data-theme="dark"] {
   flex-direction: row;
   padding: 16px;
   border-radius: 10px;
-  margin-bottom: 24px;
+  margin-bottom: 20px;
 }
 .app-profile-box img {
   width: 48px;
@@ -389,6 +389,7 @@ body[data-theme="dark"] {
   padding: 16px;
   display: block;
   flex-direction: row;
+  margin-top: 20px;
   transition: 0.2s;
 }
 .app-main-header {

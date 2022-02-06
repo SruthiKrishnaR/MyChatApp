@@ -192,8 +192,9 @@ body[data-theme="dark"] {
   align-items: center;
   flex-direction: column;
   padding: 8px;
+  margin: 10px;
   border-radius: 10px;
-  margin-bottom: 24px;
+  margin-bottom: 10px;
 }
 .app-profile-box img {
   width: 48px;

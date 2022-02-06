@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ChatService } from '../chat.service';
 import { AuthService } from '../auth.service';
-import { ChatlistComponent } from '../chatlist/chatlist.component';
 
 @Component({
   selector: 'app-chathistory',
@@ -18,15 +17,19 @@ export class ChathistoryComponent implements OnInit {
 
   ngOnInit(): void {
 
-    let id = sessionStorage.getItem('chatUser')
-    this._chat.getSingleUser(id).subscribe((data)=>{
-      this.user=JSON.parse(JSON.stringify(data))
-    })
-    
-    this._chat.newMessageReceived()
-        .subscribe(data =>          
-          this.messageArray.push(data)
-          );  
+      let id = sessionStorage.getItem('chatUser')
+
+      if(id){
+        this._chat.getSingleUser(id).subscribe((data)=>{
+          this.user=JSON.parse(JSON.stringify(data))
+        })
+      
+      this._chat.newMessageReceived()
+          .subscribe(data =>          
+            this.messageArray.push(data)
+            );  
+
+      }
   }
 
   sendMsg(){

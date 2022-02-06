@@ -15,16 +15,20 @@ export class ChatroomComponent implements OnInit {
 
   user:any=[]
   email:any=''
-
+  
 
   ngOnInit(): void {
+
+    
     this.email=sessionStorage.getItem('email')
+
     this.chat.getUser(this.email).subscribe((data)=>{
-      console.log(data);
-      
+      // console.log(data);
       this.user=JSON.parse(JSON.stringify(data))
-      console.log(this.user);
+      // console.log(this.user);
     })
+
+    
   }
 
   chatUser(user:any){
@@ -36,11 +40,11 @@ export class ChatroomComponent implements OnInit {
   // logout user
   logoutUser(){
 
-    this.email =sessionStorage.getItem("loginmail");
+    this.email =sessionStorage.getItem("email");
 
     this.auth.logOut(this.email)
     console.log(this.email);
-    sessionStorage.removeItem('user')
+    sessionStorage.clear()
     this.router.navigate(['/'])
   }
 }

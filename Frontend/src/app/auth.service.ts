@@ -47,12 +47,17 @@ export class AuthService {
 
   logOut(user:any){
     console.log(user)
-    return this.http.post<any>(`${this.server_address}/logout`,user)
-   .subscribe((data)=>{
-      
-      console.log(data)
-    })
-
+    return this.http.get<any>(`${this.server_address}/logout/`+user)
+    .subscribe(
+      res=>{
+        console.log(res);
+        
+      },
+      err=>{
+        console.log(err);
+        
+      }
+    )
   }
 
 }
