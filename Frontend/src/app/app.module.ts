@@ -9,6 +9,7 @@ import { ChatroomComponent } from './chatroom/chatroom.component';
 import { HeaderComponent } from './header/header.component';
 import { AuthService } from './auth.service';
 import { ChathistoryComponent } from './chathistory/chathistory.component';
+import { ChatlistComponent } from './chatlist/chatlist.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import { ChathistoryComponent } from './chathistory/chathistory.component';
     HomeComponent,
     ChatroomComponent,
     HeaderComponent,
-    ChathistoryComponent
+    ChathistoryComponent,
+    ChatlistComponent
   ],
   imports: [
     BrowserModule,

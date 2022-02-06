@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ChatService } from '../chat.service';
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-chathistory',
@@ -18,12 +19,13 @@ export class ChathistoryComponent implements OnInit {
     this._chat.newMessageReceived()
         .subscribe(data =>          
           this.messageArray.push(data)
-          );
+          );  
   }
 
   sendMsg(){
+    let loginmail=sessionStorage.getItem("loginmail");
     console.log(this.msg);
-    this._chat.sendMessage(this.msg);
+    this._chat.sendMessage({user:loginmail,  message:this.msg});
   }
 
   

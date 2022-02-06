@@ -21,21 +21,6 @@ export class AuthService {
     this.socket.emit('join', data);
   }
 
-  // sendMessage(data: any): void {
-  //   this.socket.emit('message', data);
-  // }
-
-  // getMessage(): Observable<any> {
-  //   return new Observable<{user: string, message: string}>(observer => {
-  //     this.socket.on('new message', (data) => {
-  //       observer.next(data);
-  //     });
-
-  //     return () => {
-  //       this.socket.disconnect();
-  //     }
-  //   });
-  // }
 
   getStorage() {
     const storage : any = localStorage.getItem('chats');
@@ -60,5 +45,14 @@ export class AuthService {
     return !!localStorage.getItem('user')
   }
 
+  logOut(user:any){
+    console.log(user)
+    return this.http.post<any>(`${this.server_address}/logout`,user)
+   .subscribe((data)=>{
+      
+      console.log(data)
+    })
+
+}
 
 }

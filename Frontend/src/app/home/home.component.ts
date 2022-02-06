@@ -19,6 +19,8 @@ export class HomeComponent implements OnInit {
     password: new FormControl('',[Validators.required,Validators.pattern('^(?=[^A-Z]*[A-Z])(?=[^a-z]*[a-z])(?=\\D*\\d)[A-Za-z\\d!$%@#£€*?&]{8,}$')])
   });
 
+   
+
   get email(){ 
     return this.regForm.get('email');
   }
@@ -26,7 +28,7 @@ export class HomeComponent implements OnInit {
   get password(){ 
     return this.regForm.get('password');
   }
-
+  
   user={
     email:'',
     password:''
@@ -38,25 +40,23 @@ export class HomeComponent implements OnInit {
   registerStudent(){
     
     console.log("called");
-    
-    console.log(this.regForm.value);
     this.authservice.userSignup(this.regForm.value)
     .subscribe(
       data=>{
-        alert("register successfully");
+        alert("register successfully");        
         this.ngOnInit;
       },
       err=>{
         alert(err.error)
         
-      }
-
-    )
+    })
 
   }
 
   login(){
     console.log(this.user);
+    sessionStorage.setItem("loginmail",this.user.email.toString())
+    
     this.authservice.userlogin(this.user)
     .subscribe(
       data=>{

@@ -42,7 +42,7 @@ app.post('/signup',async(req,res)=>{
                 },
                 data=>{
                     console.log("Registration Successfull");
-                    res.send()
+                    res.send(data)
                 }  
             )
         }
@@ -77,6 +77,22 @@ app.post('/login',(req,res)=>{
     })
 })
 
+// logout 
+
+app.post('/logout',function(req, res){
+    res.header("Access-Control-Allow-Origin","*")
+    res.header("Access-Control-Allow-Methods:GET,POST,PATCH,PUT,DELETE,OPTIONS")
+   // const id = req.body._id;
+   console.log(req.body.email);
+  const email=req.body.email;
+  
+     userdata.findOneAndUpdate({"email":email}, {$set:{"status":"offline"}})
+     .then((offlineuser)=>{
+         res.send(offlineuser);
+        // console.log(verifiedcandidate)
+     });
+ })
+
 console.log("b4 connection");
 
 io.on('connection', (socket) => {
@@ -89,15 +105,15 @@ io.on('connection', (socket) => {
     socket.on('message', (data) => {
 
         var chatdata={
-            // user:data.user,
-            message:data,
+            user:data.user,
+            message:data.message,
             // room:data.room
           }
 
         var chatdata = new privateData(chatdata);
         chatdata.save();
         // console.log(data);
-        io.emit('new message', { message: data});
+        io.emit('new message', {user:data.user, message:data.message});
     });
 });
 

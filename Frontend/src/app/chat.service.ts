@@ -28,5 +28,5 @@ export class ChatService {
     });
 
     return observable;
-}
+  }
 }

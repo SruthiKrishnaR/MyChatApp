@@ -9,3 +9,12 @@
   background-color: black;
   padding-top: 20px;
 }
+.navbar {
+  display: none;
+}
+@media screen and (max-width: 1025px) {
+  .navbar {
+    display: flex;
+    position: relative;
+  }
+}
