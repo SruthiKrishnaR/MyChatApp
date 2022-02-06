@@ -10,6 +10,7 @@ import { HeaderComponent } from './header/header.component';
 import { AuthService } from './auth.service';
 import { ChathistoryComponent } from './chathistory/chathistory.component';
 import { ChatlistComponent } from './chatlist/chatlist.component';
+import { ChatService } from './chat.service';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,7 @@ import { ChatlistComponent } from './chatlist/chatlist.component';
     FormsModule,
     HttpClientModule
   ],
-  providers: [AuthService],
+  providers: [AuthService,ChatService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

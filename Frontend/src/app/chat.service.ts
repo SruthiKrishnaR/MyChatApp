@@ -29,4 +29,13 @@ export class ChatService {
 
     return observable;
   }
+
+  // User mail
+  getUser(email:any){
+    return this.http.get<any>(`${this.server_address}/getUsers`,email)
+  }
+  getSingleUser(id:any){
+    return this.http.get<any>(`${this.server_address}/getUser/`+id)
+  }
+
 }

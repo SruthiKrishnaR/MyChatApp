@@ -42,7 +42,7 @@ export class AuthService {
   }
 
   userLoggedIn(){
-    return !!localStorage.getItem('user')
+    return !!sessionStorage.getItem('user')
   }
 
   logOut(user:any){
@@ -53,6 +53,6 @@ export class AuthService {
       console.log(data)
     })
 
-}
+  }
 
 }

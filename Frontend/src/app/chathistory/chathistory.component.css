@@ -400,7 +400,7 @@ body[data-theme="dark"] {
 
 .chat-wrapper {
   overflow: auto;
-  min-height: 62vh;
+  min-height: 58vh;
   /* padding-top: 125%; */
 }
 
@@ -833,6 +833,11 @@ body[data-theme="dark"] {
     float: right;
     margin-top: -4%;
     margin-bottom: 5%;
+  }
+  .chat-wrapper {
+    overflow: auto;
+    min-height: 58vh;
+    /* padding-top: 125%; */
   }
 }
 @media screen and (max-width: 680px) {

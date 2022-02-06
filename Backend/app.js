@@ -49,6 +49,29 @@ app.post('/signup',async(req,res)=>{
     })
 })
 
+// Users List
+
+app.get('/getUsers',(req,res)=>{
+    res.header("Acces-Control-Allow-Origin","*");
+    res.header("Acces-Control-Allow-Methods: GET, POST, PATH, PUT, DELETE, HEAD"); 
+    userdata.find().then((data)=>{
+        console.log(data);
+        res.send(data)
+    }) 
+})
+
+app.get('/getUser/:id',(req,res)=>{
+    res.header("Acces-Control-Allow-Origin","*");
+    res.header("Acces-Control-Allow-Methods: GET, POST, PATH, PUT, DELETE, HEAD"); 
+    let id=req.params.id
+    userdata.findOne({_id:id}).then((data)=>{
+        console.log(data);
+        res.send(data)
+    }) 
+})
+
+// login user
+
 app.post('/login',(req,res)=>{
     res.header("Acces-Control-Allow-Origin","*");
     res.header("Acces-Control-Allow-Methods: GET, POST, PATH, PUT, DELETE, HEAD"); 
@@ -60,18 +83,23 @@ app.post('/login',(req,res)=>{
             .then((response)=>{
                 if(response){
                     console.log("user");
+                    console.log(user.email);
                     // let payload = {subject: req.body.student.email+req.body.student.password}
                     // let token = jwt.sign(payload, 'studentKey')
                     // res.status(200).send({token,role:'student',id:student._id})
-                    req.body.status = "online";
-                    console.log(req.body.status);
-                    res.send()
+                    userdata.findOneAndUpdate({email:user.email}, 
+                        {$set:{status:"online"}
+                    })
+                    console.log("success");
+                    res.send(user)
                    
                 }else{
+                    console.log("failed");
                     res.status(401).send('Invalid user Password')
                 }
             })   
         }else{
+            console.log("failed");
             res.status(401).send('Invalid credential')
         }
     })
