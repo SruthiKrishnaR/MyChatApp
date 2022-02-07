@@ -381,9 +381,9 @@ body[data-theme="dark"] {
 }
 
 .app-main {
-  flex: 2;
+  flex: 3;
   height: 110%;
-  width: 100%;
+  width: 145vh;
   background-color: var(--box-color);
   border-radius: 10px;
   padding: 16px;
@@ -416,6 +416,7 @@ body[data-theme="dark"] {
 }
 .chat-input:placeholder {
   color: var(--text-light);
+
   font-size: 12px;
 }
 .chat-input-wrapper {
@@ -808,7 +809,11 @@ body[data-theme="dark"] {
   border-radius: 10px;
   background: var(--scrollbar-thumb);
 }
-
+.button {
+  display: inline-block;
+  position: relative;
+  right: 0;
+}
 @media screen and (max-width: 1025px) {
   .app-left {
     transform: translateX(-100%);

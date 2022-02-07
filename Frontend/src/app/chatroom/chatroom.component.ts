@@ -23,9 +23,7 @@ export class ChatroomComponent implements OnInit {
     this.email=sessionStorage.getItem('email')
 
     this.chat.getUser(this.email).subscribe((data)=>{
-      // console.log(data);
       this.user=JSON.parse(JSON.stringify(data))
-      // console.log(this.user);
     })
 
     

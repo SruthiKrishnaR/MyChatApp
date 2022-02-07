@@ -18,10 +18,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 const port = process.env.PORT || 5200;
 
+
+
 app.post('/signup',async(req,res)=>{
     res.header("Acces-Control-Allow-Origin","*");
     res.header("Acces-Control-Allow-Methods: GET, POST, PATH, PUT, DELETE, HEAD"); 
-    // console.log(req.body);
+    console.log(req.body);
     var item={
         name:req.body.name,
         password:req.body.password,
@@ -42,20 +44,17 @@ app.post('/signup',async(req,res)=>{
                 },
                 data=>{
                     console.log("Registration Successfull");
-                    res.send(data)
+                    res.send()
                 }  
             )
         }
     })
 })
 
-// Users List
-
 app.get('/getUsers',(req,res)=>{
     res.header("Acces-Control-Allow-Origin","*");
     res.header("Acces-Control-Allow-Methods: GET, POST, PATH, PUT, DELETE, HEAD"); 
     userdata.find().then((data)=>{
-        console.log(data);
         res.send(data)
     }) 
 })
@@ -64,18 +63,27 @@ app.get('/getUser/:id',(req,res)=>{
     res.header("Acces-Control-Allow-Origin","*");
     res.header("Acces-Control-Allow-Methods: GET, POST, PATH, PUT, DELETE, HEAD"); 
     let id=req.params.id
+
     userdata.findOne({_id:id}).then((data)=>{
-        console.log(data);
         res.send(data)
     }) 
 })
 
-// login user
+app.get('/chatHistory/:item', (req, res) => {
+    const room = req.params.item;
+    privateData.find({ room:room  })
+      // Userdata.findOne({"email":email})
+      .then((otheruserdetail)=>{
+          res.send(otheruserdetail);
+       // console.log(otheruserdetail)
+      });
+  })
 
 app.post('/login',(req,res)=>{
+    console.log("login");
     res.header("Acces-Control-Allow-Origin","*");
     res.header("Acces-Control-Allow-Methods: GET, POST, PATH, PUT, DELETE, HEAD"); 
-    // console.log(req.body);
+    console.log(req.body);
     userdata.findOne({email:req.body.email},(err,user)=>{
         console.log(user);
         if(user){
@@ -83,17 +91,17 @@ app.post('/login',(req,res)=>{
             .then((response)=>{
                 if(response){
                     console.log("user");
-                    console.log(user.email);
                     // let payload = {subject: req.body.student.email+req.body.student.password}
                     // let token = jwt.sign(payload, 'studentKey')
                     // res.status(200).send({token,role:'student',id:student._id})
+                    
+                    console.log("success");
                     userdata.findOneAndUpdate({email:user.email}, 
                         {$set:{status:"online"}
                     }).then(()=>{
-
                         res.send(user)
+
                     })
-                    console.log("success");
                    
                 }else{
                     console.log("failed");
@@ -107,21 +115,6 @@ app.post('/login',(req,res)=>{
     })
 })
 
-// logout 
-
-app.get('/logout/:mail',function(req, res){
-    res.header("Access-Control-Allow-Origin","*")
-    res.header("Access-Control-Allow-Methods:GET,POST,PATCH,PUT,DELETE,OPTIONS")
-   // const id = req.body._id;
-   console.log("logout"+req.params.mail);
-  const email=req.params.mail;
-     userdata.findOneAndUpdate({"email":email}, {$set:{status:"offline"}})
-     .then((offlineuser)=>{
-         console.log("logout");
-         res.send();
-     });
- })
-
 console.log("b4 connection");
 
 io.on('connection', (socket) => {
@@ -130,6 +123,23 @@ io.on('connection', (socket) => {
         socket.join(data.room);
         socket.broadcast.to(data.room).emit('user joined');
     });
+
+    socket.on('sendindvmsg',function(data){
+        let date_ob = new Date();
+        var chatdata={
+          user:data.user,
+          message:data.message,
+          room:data.room,
+          date:new Date().toLocaleDateString(),
+          time:formatAMPM(new Date)
+        }
+        console.log(chatdata);
+        var chatdata=new privateData(chatdata);
+    chatdata.save().then(()=>{
+    })
+    io.in(data.room).emit('new_indvmessage', {message:data.message,user:data.user});
+      
+      })
 
     socket.on('message', (data) => {
 
@@ -146,8 +156,28 @@ io.on('connection', (socket) => {
     });
 });
 
-
-
+app.get('/logout/:mail',function(req, res){
+    res.header("Access-Control-Allow-Origin","*")
+    res.header("Access-Control-Allow-Methods:GET,POST,PATCH,PUT,DELETE,OPTIONS")
+   // const id = req.body._id;
+   console.log("logout"+req.params.mail);
+  const email=req.params.mail;
+     userdata.findOneAndUpdate({"email":email}, {$set:{status:"offline"}})
+     .then(()=>{
+         console.log("logout");
+         res.send();
+     });
+ })
+ function formatAMPM(date) {
+    var hours = date.getHours();
+    var minutes = date.getMinutes();
+    var ampm = hours >= 12 ? 'pm' : 'am';
+    hours = hours % 12;
+    hours = hours ? hours : 12; // the hour '0' should be '12'
+    minutes = minutes < 10 ? '0'+minutes : minutes;
+    var strTime = hours + ':' + minutes + ' ' + ampm;
+    return strTime;
+  }
 server.listen(port, () => {
     console.log(`started on port: ${port}`);
 });

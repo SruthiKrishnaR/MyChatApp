@@ -17,29 +17,28 @@ export class ChatlistComponent implements OnInit {
 
   ngOnInit(): void {
 
-    setInterval(()=>{
-
       this.email=sessionStorage.getItem('email');
       this.chat.getUser(this.email).subscribe((data)=>{
         console.log(data);
         this.user=JSON.parse(JSON.stringify(data))
         console.log(this.user);
         this.count=this.user.length-1
-        console.log(this.count);
+        // console.log(this.count);
         
       })
-    },1000)
     
   }
 
   chatUser(user:any){
     console.log(user);
     sessionStorage.setItem('chatUser',user._id);
-    this.router.navigate(['/'])
-    .then(() => {
-      window.location.reload();
+    // this.router.navigate(['/'])
+    window.location.reload()
 
-    });
+    // .then(() => {
+    //   window.location.reload();
+
+    // });
   }
 
   
