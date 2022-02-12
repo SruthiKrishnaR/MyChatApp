@@ -2,11 +2,11 @@
 <body>
   <div >
       
-    <div class="app-profile-box col-md-12">
+    <div class="app-profile-box col-md-12" *ngIf="userSelected()">
       <div class="app-profile-box-name col-md-10">
        {{user.name}}       
       </div>  
-      <div class="button col-md-3"  *ngIf="userSelected()">
+      <div class="button col-md-3"  >
         <button class="btn btn-outline-danger" style="margin-right: 2mm;">Block</button>
         <button class="btn btn-outline-primary">Mute</button>
       </div>  
@@ -68,9 +68,9 @@
       
     <!-- </div> -->
 
-    <div class="app-main" *ngIf="!userSelected()" >
+    <div class="app-main" *ngIf="!userSelected()" style="height: 150%;" >
         <div class="chat-wrapper">
-          
+          <img src="../../assets/images/welcome.jpg" alt="" width="100%" height="600px">
         </div>
 
       </div>
