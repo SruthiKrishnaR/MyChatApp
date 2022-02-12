@@ -78,17 +78,17 @@ export class ChathistoryComponent implements OnInit {
     imagefile:any;
     image:string=''
     onFileSelected(event:any){
-  if(event.target.files){
-  
-    var reader=new FileReader();
-    reader.readAsDataURL(event.target.files[0]);
-    reader.onload=(event:any)=>{
-    this.imageUrl=reader.result;
+      if(event.target.files){
+      
+        var reader=new FileReader();
+        reader.readAsDataURL(event.target.files[0]);
+        reader.onload=(event:any)=>{
+        this.imageUrl=reader.result;
+        }
+        this.imagefile=<File>event.target.files[0];
+        } 
+        this.image=this.imagefile.name;
     }
-    this.imagefile=<File>event.target.files[0];
-    } 
-    this.image=this.imagefile.name;
-  }
 
   userSelected(){
     return !!sessionStorage.getItem('chatUser')
