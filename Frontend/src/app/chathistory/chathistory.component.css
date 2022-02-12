@@ -381,16 +381,18 @@ body[data-theme="dark"] {
 }
 
 .app-main {
-  flex: 3;
-  height: 110%;
-  width: 145vh;
+  flex: 2;
+  height: 70%;
+  width: 140vh;
+  /* width: 100%; */
   background-color: var(--box-color);
   border-radius: 10px;
-  padding: 16px;
+  padding: 10px;
   display: block;
   flex-direction: row;
   margin-top: 20px;
   transition: 0.2s;
+  overflow-y: auto;
 }
 .app-main-header {
   position: sticky;
@@ -400,9 +402,8 @@ body[data-theme="dark"] {
 }
 
 .chat-wrapper {
-  overflow: auto;
-  min-height: 58vh;
-  /* padding-top: 125%; */
+  overflow-y: auto;
+  /* min-height: 58vh; */
 }
 
 .chat-input {
@@ -426,7 +427,7 @@ body[data-theme="dark"] {
   box-shadow: var(--box-shadow);
   margin-top: auto;
   border-radius: 6px;
-  padding: 12px;
+  padding: 10px 0px;
   background-color: var(--chat-input);
 }
 
@@ -437,9 +438,9 @@ body[data-theme="dark"] {
   display: flex;
   flex: 1;
   overflow: hidden;
-  padding: 0 6px 0 12px;
+  padding: 0 6px 0 6px;
   justify-content: space-between;
-  margin: 0 8px;
+  margin: 0 1px;
   background-color: var(--chat-input);
 }
 
@@ -483,6 +484,7 @@ body[data-theme="dark"] {
   display: flex;
   align-items: flex-start;
   padding-bottom: 20px;
+  overflow-y: auto;
 }
 .message-wrapper.reverse {
   justify-content: flex-end;
@@ -519,7 +521,7 @@ body[data-theme="dark"] {
   width: auto;
   max-width: 80%;
   color: var(--text-dark);
-  overflow: auto;
+  overflow-y: auto;
 }
 .message-box-wrapper {
   margin: 0 12px;
@@ -814,6 +816,11 @@ body[data-theme="dark"] {
   position: relative;
   right: 0;
 }
+.chat-wrapper {
+  overflow-y: auto;
+  /* min-height: 58vh; */
+  /* padding-top: 125%; */
+}
 @media screen and (max-width: 1025px) {
   .app-left {
     transform: translateX(-100%);
@@ -841,7 +848,7 @@ body[data-theme="dark"] {
     margin-bottom: 5%;
   }
   .chat-wrapper {
-    overflow: auto;
+    overflow-y: scroll;
     min-height: 58vh;
     /* padding-top: 125%; */
   }
