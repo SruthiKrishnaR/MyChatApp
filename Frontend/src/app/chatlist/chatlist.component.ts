@@ -14,7 +14,13 @@ export class ChatlistComponent implements OnInit {
   count:any=0
   email:any=''
   user:any=[]
+  groupname: any='';
 
+
+  createGroup(){
+    console.log(this.groupname);
+  }
+   
   ngOnInit(): void {
 
       this.email=sessionStorage.getItem('email');

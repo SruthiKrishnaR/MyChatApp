@@ -40,21 +40,53 @@
 
           <div class="chat-list-wrapper" >
             <div class="chat-list-header active" style="color: rgb(127, 143, 189);">Group Chats 
-              <!-- <span class="c-number">3</span> -->
               
-              <div style="padding-left: 20px;">
-              <!-- <button type="button" class="btn btn-outline-primary">
-                Create Group
-              </button> -->
+            <div style="padding-left: 20px;">
+              <!-- <button class="btn btn-outline-primary" (click)="open()">Create Group</button> -->
 
+              <!-- modal -->
+              <div>
+                
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal">
+                  Create Group
+                </button>
+              </div>
               
+              <!-- The Modal -->
+              <div class="modal" id="myModal">
+                <div class="modal-dialog modal-lg">
+                  <div class="modal-content">
+              
+                    <!-- Modal Header -->
+                    <!-- <div class="modal-header">
+                      <h4 class="modal-title">Create Group Name</h4>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div> -->
+              
+                    <!-- Modal body -->
+                    <div class="modal-body">
+                     <input type="text" name="groupname" [(ngModel)]="groupname" class="form-control" placeholder="Create Group">
+                    </div>
+              
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-success" (click)="createGroup()"  data-bs-dismiss="modal">Ok</button>
+                      <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
+                    </div>
+              
+                  </div>
+                </div>
+              </div>
 
+       <!-- modal -->
+
+       
             </div>
           </div>
 
           
 
-            <ul *ngFor="let user of user" class="chat-list active">
+            <!-- <ul *ngFor="let user of user" class="chat-list active">
               <li style=" display: flex; justify-content: space-between;" *ngIf="email!==user.email" class="chat-list-item active">
                 <div>
   
@@ -73,7 +105,7 @@
                     justify-content: space-between;"></span>
                   </div>
                 </li>
-            </ul>
+            </ul> -->
 
           </div>
 
