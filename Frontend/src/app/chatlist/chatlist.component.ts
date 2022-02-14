@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ChatService } from '../chat.service';
 import { Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 
 
 @Component({
@@ -46,6 +47,8 @@ export class ChatlistComponent implements OnInit {
 
     // });
   }
+
+  
 
   
 }

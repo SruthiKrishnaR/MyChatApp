@@ -13,6 +13,9 @@ export class ChathistoryComponent implements OnInit {
   messageArray:Array<{user:String,message:String,userID:String,time:String,imgfile:String}> = [];
   user:any=[];
   room:any=''
+  block:any=[]
+  userBlocked=''
+  isuserBlocked='';
   
   constructor(private _chat:ChatService) { }
   usermail:any='';
@@ -29,6 +32,10 @@ export class ChathistoryComponent implements OnInit {
               this._chat.chatHistory(this.room)
               .subscribe((data)=>{
                 this.messageArray=JSON.parse(JSON.stringify(data))
+                this._chat.getBlockData().subscribe((data)=>{
+                  this.block=JSON.parse(JSON.stringify(data))
+    
+                })
                 // var elem = document.getElementById('commentbox');
                 // elem.scrollTop = elem.scrollHeight;
               })
@@ -42,7 +49,13 @@ export class ChathistoryComponent implements OnInit {
       }
 
       sendMsg(){
-        if(this.msg!==''){
+        this.userIsBlocked()
+        this.blockedUser()
+        if(this.userBlocked=='yes'){
+          alert("you had blocked this user")
+        } else if(this.isuserBlocked=='yes'){
+          alert("you cant send msg to this user as you are blocked")
+        }else if(this.msg!==''){
           this._chat.sndprivatemsg(this.usermail,this.msg,this.id,this.room)
           this.msg=''
         }
@@ -65,13 +78,19 @@ export class ChathistoryComponent implements OnInit {
     }
 
     sendImage(){
-      if(this.imageUrl!==''){
+      this.userIsBlocked()
+      this.blockedUser()
+      if(this.userBlocked=='yes'){
+        alert("you had blocked this user")
+      } else if(this.isuserBlocked=='yes'){
+        alert("you cant send msg to this user as you are blocked")
+      }else if(this.imageUrl!==''){
         this._chat.sndprvtimg(this.usermail,this.imageUrl,this.id,this.room)
-        console.log(this.imageUrl);
-        
         this.imagemodel='';
         this.imageUrl=''
+    
       }
+    
     }
 
     imageUrl:any='';
@@ -92,6 +111,52 @@ export class ChathistoryComponent implements OnInit {
 
   userSelected(){
     return !!sessionStorage.getItem('chatUser')
+  }
+
+  blockUser(user_email:any){
+    console.log(user_email);
+    console.log(this.usermail);
+    this._chat.blockUser(this.usermail,user_email)
+    .subscribe((data)=>{
+      alert("USER BLOCKED!!")
+    })
+    
+    
+  }
+
+  unblockUser(user_email:any){
+    this._chat.unblockUser(this.usermail,user_email)
+    .subscribe((data)=>{
+      alert("USER UNBLOCKED!!")
+      window.location.reload()
+      
+    })
+    
+  }
+  
+  blockedUser(){
+    for(let i of this.block){        
+      if(i.from==this.usermail&&i.to==this.user.email){
+        this.userBlocked="yes"
+      }else{
+        this.userBlocked=""
+      }
+    }
+  }
+
+  userIsBlocked(){
+    for(let i of this.block){        
+      if(i.to==this.usermail&&i.from==this.user.email){
+        this.isuserBlocked="yes"
+      }else{
+        this.isuserBlocked=""
+      }
+    }
+  }
+
+  checkBlock(){
+    this.blockedUser()
+    return !!this.userBlocked
   }
 
 }

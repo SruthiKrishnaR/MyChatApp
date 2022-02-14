@@ -17,7 +17,7 @@
               <li style=" display: flex; justify-content: space-between;" *ngIf="email!==user.email" class="chat-list-item active">
                 <div>
   
-                  <img src="https://images.unsplash.com/photo-1587080266227-677cc2a4e76e?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=934&q=80" alt="chat">
+                  <!-- <img src="https://images.unsplash.com/photo-1587080266227-677cc2a4e76e?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=934&q=80" alt="chat"> -->
                   
                   <span (click)="chatUser(user)"  class="chat-list-name">{{user.name}}</span>
                 </div>
@@ -65,7 +65,7 @@
               
                     <!-- Modal body -->
                     <div class="modal-body">
-                     <input type="text" name="groupname" [(ngModel)]="groupname" class="form-control" placeholder="Create Group">
+                     <input type="text" name="groupname" [(ngModel)]="groupname" class="form-control" placeholder="Enter Group Name">
                     </div>
               
                     <!-- Modal footer -->

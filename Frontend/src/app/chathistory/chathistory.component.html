@@ -7,7 +7,9 @@
        {{user.name}}       
       </div>  
       <div class="button col-md-3"  >
-        <button class="btn btn-outline-danger" style="margin-right: 2mm;">Block</button>
+        <button class="btn btn-outline-danger" (click)="blockUser(user.email)" *ngIf="!checkBlock()"  style="margin-right: 2mm;">Block</button>
+        <button class="btn btn-outline-danger" (click)="unblockUser(user.email)" *ngIf="checkBlock()" style="margin-right: 2mm;">Unblock</button>
+        
         <button class="btn btn-outline-primary">Mute</button>
       </div>  
     </div>
