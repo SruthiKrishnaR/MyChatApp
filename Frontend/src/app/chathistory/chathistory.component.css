@@ -383,7 +383,7 @@ body[data-theme="dark"] {
 .app-main {
   flex: 2;
   height: 70%;
-  width: 140vh;
+  width: 137vh;
   /* width: 100%; */
   background-color: var(--box-color);
   border-radius: 10px;
