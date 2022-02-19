@@ -40,7 +40,7 @@
 
           <div class="chat-list-wrapper" >
             <div class="chat-list-header active" style="color: rgb(127, 143, 189);">Group Chats 
-              
+              <!-- <span class="c-number">{{gcount}}  </span>  -->
             <div style="padding-left: 20px;">
               <!-- <button class="btn btn-outline-primary" (click)="open()">Create Group</button> -->
 
@@ -57,11 +57,6 @@
                 <div class="modal-dialog modal-lg">
                   <div class="modal-content">
               
-                    <!-- Modal Header -->
-                    <!-- <div class="modal-header">
-                      <h4 class="modal-title">Create Group Name</h4>
-                      <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                    </div> -->
               
                     <!-- Modal body -->
                     <div class="modal-body">
@@ -79,10 +74,23 @@
               </div>
 
        <!-- modal -->
-
+              
        
-            </div>
-          </div>
+       
+       
+      </div>
+    </div>
+    <ul *ngFor="let group of group" class="chat-list active">
+      <li style=" display: flex;
+      justify-content: space-between;" class="chat-list-item active">
+      <div>
+        <span (click)="chatGroup(group)" class="chat-list-name">{{group.name}}</span>
+      </div>
+      </li>
+    </ul>
+  
+
+
 
           
 
@@ -119,3 +127,12 @@
       </div>
       
     </body>
+
+
+
+
+
+
+
+  
+

@@ -6,6 +6,8 @@ var userdata=require('./src/modal/userData')
 var bcrypt=require('bcrypt')
 var privateData = require('./src/modal/privateData')
 var blockData=require('./src/modal/blockData')
+var roomData=require('./src/modal/roomData')
+var roomChatData=require('./src/modal/roomChatData')
 
 let http = require('http');
 let server = http.Server(app);
@@ -80,6 +82,88 @@ app.get('/chatHistory/:item', (req, res) => {
       });
   })
 
+  app.get('/groupChatHistory/:item', (req, res) => {
+    const room = req.params.item;
+    roomChatData.find({ room:room  })
+      // Userdata.findOne({"email":email})
+      .then((otheruserdetail)=>{
+          res.send(otheruserdetail);
+       // console.log(otheruserdetail)
+      });
+  })
+
+  app.get('/getGroups',(req,res)=>{
+    res.header("Acces-Control-Allow-Origin","*");
+    res.header("Acces-Control-Allow-Methods: GET, POST, PATH, PUT, DELETE, HEAD"); 
+    roomData.find().then((data)=>{
+        res.send(data)
+    }) 
+})
+
+app.post('/createGroup',(req,res)=>{
+
+    roomData.findOne({"name":req.body.name})
+    .then((data)=>{
+        if(data){
+            res.status(401).send('Group Already Exist')
+        }else{
+            let group={
+                name:req.body.name
+            }
+            console.log(group);
+            var groupchat=new roomData(group);
+            groupchat.save();
+            return res.status(200).send(); 
+        }
+    })
+})
+
+app.get('/getGroup/:id',(req,res)=>{
+    res.header("Acces-Control-Allow-Origin","*");
+    res.header("Acces-Control-Allow-Methods: GET, POST, PATH, PUT, DELETE, HEAD"); 
+    let id=req.params.id
+
+    roomData.findOne({_id:id},(err,data)=>{
+        res.send(data)
+    }) 
+})
+
+app.post('/blockUser',(req,res)=>{
+    console.log("block");
+    console.log(req.body);
+    var blockchat={
+        from:req.body.from,
+         to:req.body.to,
+       }
+       var blockchat=new blockData(blockchat);
+       blockchat.save();
+       return res.status(200).send(); 
+})
+
+app.post('/unBlockUser',(req,res)=>{
+    console.log("block");
+    console.log(req.body);
+    blockData.findOneAndDelete({"from":req.body.from,"to":req.body.to})
+    .then(()=>{
+        res.send()
+    })
+})
+
+app.get('/blockList',(req,res)=>{
+    blockData.find().then((data)=>{res.send(data)})
+})
+
+app.post('/joinGroup',(req,res)=>{
+    console.log(req.body);
+    roomData.findOneAndUpdate({_id:req.body.room}, 
+        {$push:{members:req.body.mail}
+    }).then((data)=>{
+        console.log(data);
+        res.send()
+    })
+
+})
+
 app.post('/login',(req,res)=>{
     console.log("login");
     res.header("Acces-Control-Allow-Origin","*");
@@ -116,31 +200,6 @@ app.post('/login',(req,res)=>{
     })
 })
 
-app.post('/blockUser',(req,res)=>{
-    console.log("block");
-    console.log(req.body);
-    var blockchat={
-        from:req.body.from,
-         to:req.body.to,
-       }
-       var blockchat=new blockData(blockchat);
-       blockchat.save();
-       return res.status(200).send(); 
-})
-
-app.post('/unBlockUser',(req,res)=>{
-    console.log("block");
-    console.log(req.body);
-    blockData.findOneAndDelete({"from":req.body.from,"to":req.body.to})
-    .then(()=>{
-        res.send()
-    })
-})
-
-app.get('/blockList',(req,res)=>{
-    blockData.find().then((data)=>{res.send(data)})
-})
-
 console.log("b4 connection");
 
 io.on('connection', (socket) => {
@@ -151,6 +210,26 @@ io.on('connection', (socket) => {
     });
 
     socket.on('sendindvmsg',function(data){
+            console.log(data);
+            let date_ob = new Date();
+            var chatdata={
+              user:data.user,
+              message:data.message,
+              room:data.room,
+              date:new Date().toLocaleDateString(),
+              time:formatAMPM(new Date)
+            }
+            console.log(chatdata);
+            var chatdata=new privateData(chatdata);
+        chatdata.save().then(()=>{
+        })
+        io.in(data.room).emit('new_indvmessage', {message:data.message,user:data.user});
+          
+     
+      })
+
+      socket.on('sendgrpmsg',function(data){
+        console.log(data);
         let date_ob = new Date();
         var chatdata={
           user:data.user,
@@ -160,13 +239,13 @@ io.on('connection', (socket) => {
           time:formatAMPM(new Date)
         }
         console.log(chatdata);
-        var chatdata=new privateData(chatdata);
+        var chatdata=new roomChatData(chatdata);
     chatdata.save().then(()=>{
     })
-    io.in(data.room).emit('new_indvmessage', {message:data.message,user:data.user});
+    io.in(data.room).emit('new_groupmessage', {message:data.message,user:data.user});
       
-      })
-
+ 
+  })
 
       socket.on('sendimage',function(data){
         let date_ob = new Date();
@@ -178,6 +257,21 @@ io.on('connection', (socket) => {
           time:formatAMPM(new Date)
         }
         var chatdata=new privateData(chatdata);
+       chatdata.save();
+       io.in(data.room).emit('new_image', {image:data.image,user:data.user});
+      
+      })
+
+      socket.on('sendgrpimage',function(data){
+        let date_ob = new Date();
+        var chatdata={
+          user:data.user,
+          imgfile:data.image,
+          room:data.room,
+          date:new Date().toLocaleDateString(),
+          time:formatAMPM(new Date)
+        }
+        var chatdata=new roomChatData(chatdata);
        chatdata.save();
        io.in(data.room).emit('new_image', {image:data.image,user:data.user});
       

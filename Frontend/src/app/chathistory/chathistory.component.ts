@@ -1,13 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,ViewChild,ElementRef,AfterViewChecked } from '@angular/core';
 import { ChatService } from '../chat.service';
 import { AuthService } from '../auth.service';
+
 
 @Component({
   selector: 'app-chathistory',
   templateUrl: './chathistory.component.html',
   styleUrls: ['./chathistory.component.css']
 })
-export class ChathistoryComponent implements OnInit {
+
+export class ChathistoryComponent implements OnInit ,AfterViewChecked {
   imagemodel:any
   msg:String='';
   messageArray:Array<{user:String,message:String,userID:String,time:String,imgfile:String}> = [];
@@ -16,34 +18,73 @@ export class ChathistoryComponent implements OnInit {
   block:any=[]
   userBlocked=''
   isuserBlocked='';
-  
   constructor(private _chat:ChatService) { }
   usermail:any='';
   id:any=''
+  flag:any=''
+  grpid:any=''
+  group={
+    name:'',
+    members:[]
+  };
+  ingroup:any=''
 
   ngOnInit(): void {
-        this.id = sessionStorage.getItem('chatUser')
-        if(this.id){
-          setInterval(()=>{
-            this._chat.getSingleUser(this.id).subscribe((data)=>{
-              this.user=JSON.parse(JSON.stringify(data))
-              this.usermail=sessionStorage.getItem('email')
-              this.room=(this.createRoomName(this.user.email, this.usermail));
-              this._chat.chatHistory(this.room)
+
+    this.flag=sessionStorage.getItem('chat')
+    if(this.flag=="private"){
+      this.id = sessionStorage.getItem('chatUser')
+      if(this.id){
+
+        setInterval(()=>{
+          this._chat.getSingleUser(this.id).subscribe((data)=>{
+            this.user=JSON.parse(JSON.stringify(data))
+            this.usermail=sessionStorage.getItem('email')
+            this.room=(this.createRoomName(this.user.email, this.usermail));
+            this._chat.chatHistory(this.room)
+            .subscribe((data)=>{
+              this.messageArray=JSON.parse(JSON.stringify(data))
+              // var elem = document.getElementById('commentbox');
+              // elem.scrollTop = elem.scrollHeight;
+              this._chat.getBlockData().subscribe((data)=>{
+                this.block=JSON.parse(JSON.stringify(data))
+  
+              })
+            })
+  
+          })
+        })
+       
+  
+      }
+    }else if(this.flag=="group"){
+      this.grpid=sessionStorage.getItem('chatGroup')
+      if(this.grpid){
+        setInterval(()=>{
+          this._chat.getSingleGroup(this.grpid).subscribe((data)=>{
+            this.group=JSON.parse(JSON.stringify(data))
+            this.usermail=sessionStorage.getItem('email')
+            this.inGroup()
+            var inside=sessionStorage.getItem('ingrp')
+            // console.log(inside);
+            
+
+            
+            if(this.ingroup=='yes'){
+              this._chat.groupChatHistory(this.group.name)
               .subscribe((data)=>{
                 this.messageArray=JSON.parse(JSON.stringify(data))
-                this._chat.getBlockData().subscribe((data)=>{
-                  this.block=JSON.parse(JSON.stringify(data))
-    
-                })
-                // var elem = document.getElementById('commentbox');
-                // elem.scrollTop = elem.scrollHeight;
               })
-    
-            })
+            }
+  
           })
-    
-        }
+        })
+
+      }
+      
+
+    }
+    this.scrollToBottom();
         
     
       }
@@ -64,6 +105,8 @@ export class ChathistoryComponent implements OnInit {
   refresh(){
     this.ngOnInit()
   }
+
+  
 
   createRoomName(id1:any, id2:any) {
         // make sure id1 is the smaller value for
@@ -109,8 +152,12 @@ export class ChathistoryComponent implements OnInit {
         this.image=this.imagefile.name;
     }
 
+  
   userSelected(){
     return !!sessionStorage.getItem('chatUser')
+  }
+  groupSelected(){
+    return !!sessionStorage.getItem('chatGroup')
   }
 
   blockUser(user_email:any){
@@ -159,8 +206,82 @@ export class ChathistoryComponent implements OnInit {
     return !!this.userBlocked
   }
 
+  checkPrivate(){
+    return sessionStorage.getItem('private')
 }
 
+checkGroup(){
+  return sessionStorage.getItem('group')
+}
+
+inGroup(){    
+  
+  
+        this.ingroup=''
+        let members=this.group.members 
+        for (let i of members){
+          if(i==this.usermail){
+            this.ingroup='yes'
+            
+          }
+        }
+
+}
+
+checkinsideGroup(){
+  this.inGroup()
+  return !!this.ingroup
+}
+
+joinGroup(data:any){
+  console.log(data);
+  console.log(this.usermail);
+  this._chat.joinGroup(this.usermail,data._id).subscribe(
+    data=>{
+      alert("joined to Group")
+    }
+  )
+}
+
+sendGroupImage(){
+  if(this.ingroup=='yes'){
+    if(this.imageUrl!==''){
+this._chat.sndgrpimg(this.usermail,this.imageUrl,this.group.name)
+this.imagemodel='';
+this.imageUrl=''
+
+}
+    }else {
+    alert("you cant send msg to this group!! Please join to send message")
+  }
+}
+leaveGroup(group:any){}
+
+sendGroupMsg(){
+   if(this.ingroup=='yes'){
+    if(this.msg!==''){
+      
+      this._chat.sndgrpmsg(this.usermail,this.msg,this.group.name)
+      this.msg=''
+    }
+    }else {
+    alert("you cant send msg to this group!! Please join to send message")
+  }
+}
+
+  @ViewChild('scrollMe') private myScrollContainer: ElementRef;
+
+  ngAfterViewChecked() {
+    this.scrollToBottom();
+  }
+
+  scrollToBottom(): void {
+    try {
+      this.myScrollContainer.nativeElement.scrollTop = this.myScrollContainer.nativeElement.scrollHeight;
+    } catch(err) { }
+  }
+
+}
 
 
 
