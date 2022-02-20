@@ -852,6 +852,9 @@ body[data-theme="dark"] {
     min-height: 58vh;
     /* padding-top: 125%; */
   }
+  .body {
+    width: 60%;
+  }
 }
 @media screen and (max-width: 680px) {
   .app-right {
